@@ -1,0 +1,505 @@
+{
+  "manifest_version": 1,
+  "type": "device",
+  "name": "Polestar",
+  "description": {
+    "en": "Battery, range, charging, odometer and service of your Polestar cars.",
+    "fr": "Batterie, autonomie, charge, kilométrage et entretien de vos Polestar.",
+    "de": "Akku, Reichweite, Laden, Kilometerstand und Wartung deiner Polestar.",
+    "es": "Batería, autonomía, carga, kilometraje y mantenimiento de sus Polestar."
+  },
+  "version": "0.0.0",
+  "docker_image": "ghcr.io/prohand/gladys-polestar:0.0.0",
+  "gladys_version": ">=5.3.0",
+  "cover_image": "https://raw.githubusercontent.com/prohand/gladys-polestar/main/cover.png",
+  "categories": ["vehicles", "energy"],
+  "keywords": [
+    "polestar",
+    "polestar 2",
+    "polestar 3",
+    "polestar 4",
+    "electric car",
+    "voiture électrique",
+    "ev",
+    "battery",
+    "charging",
+    "cloud"
+  ],
+  "transports": ["cloud"],
+  "config_schema": [
+    {
+      "key": "intro",
+      "type": "section",
+      "label": {
+        "en": "Getting started",
+        "fr": "Pour commencer",
+        "de": "Erste Schritte",
+        "es": "Primeros pasos"
+      },
+      "description": {
+        "en": "Sign in with the Polestar ID account of the Polestar app. The data comes from the Polestar cloud: the car must be online, and it reports every few minutes. Read-only: Polestar does not open remote commands.",
+        "fr": "Connectez-vous avec le compte Polestar ID de l'application Polestar. Les données viennent du cloud Polestar : la voiture doit être en ligne, elle se signale toutes les quelques minutes. Lecture seule : Polestar n'ouvre pas les commandes à distance.",
+        "de": "Melde dich mit dem Polestar-ID-Konto der Polestar-App an. Die Daten kommen aus der Polestar-Cloud: Das Auto muss online sein und meldet sich alle paar Minuten. Nur lesend: Polestar gibt keine Fernbefehle frei.",
+        "es": "Inicie sesión con la cuenta Polestar ID de la app Polestar. Los datos vienen de la nube de Polestar: el coche debe estar en línea y envía datos cada pocos minutos. Solo lectura: Polestar no abre los comandos a distancia."
+      },
+      "links": [
+        {
+          "url": "https://github.com/prohand/gladys-polestar/blob/main/docs/en.md",
+          "label": {
+            "en": "Integration documentation",
+            "fr": "Documentation de l'intégration",
+            "de": "Dokumentation der Integration",
+            "es": "Documentación de la integración"
+          }
+        }
+      ]
+    },
+    {
+      "key": "email",
+      "type": "string",
+      "label": {
+        "en": "Polestar ID e-mail",
+        "fr": "E-mail Polestar ID",
+        "de": "Polestar-ID-E-Mail",
+        "es": "Correo de Polestar ID"
+      },
+      "placeholder": {
+        "en": "e.g. me@example.com",
+        "fr": "ex. moi@exemple.fr",
+        "de": "z. B. ich@beispiel.de",
+        "es": "p. ej. yo@ejemplo.es"
+      },
+      "required": true
+    },
+    {
+      "key": "password",
+      "type": "secret",
+      "label": {
+        "en": "Polestar ID password",
+        "fr": "Mot de passe Polestar ID",
+        "de": "Polestar-ID-Passwort",
+        "es": "Contraseña de Polestar ID"
+      },
+      "required": true
+    },
+    {
+      "key": "vins",
+      "type": "string",
+      "label": {
+        "en": "Cars to follow (VIN)",
+        "fr": "Voitures à suivre (VIN)",
+        "de": "Zu verfolgende Autos (FIN)",
+        "es": "Coches a seguir (VIN)"
+      },
+      "description": {
+        "en": "Leave empty to follow every car of the account, or list VINs separated by commas.",
+        "fr": "Laissez vide pour suivre toutes les voitures du compte, ou listez des VIN séparés par des virgules.",
+        "de": "Leer lassen, um alle Autos des Kontos zu verfolgen, oder FINs mit Kommas getrennt angeben.",
+        "es": "Déjelo vacío para seguir todos los coches de la cuenta, o indique VIN separados por comas."
+      },
+      "placeholder": {
+        "en": "e.g. LPSVSEDEEML000000",
+        "fr": "ex. LPSVSEDEEML000000",
+        "de": "z. B. LPSVSEDEEML000000",
+        "es": "p. ej. LPSVSEDEEML000000"
+      },
+      "required": false,
+      "default": ""
+    },
+    {
+      "key": "poll_frequency",
+      "type": "number",
+      "label": {
+        "en": "Refresh interval (s)",
+        "fr": "Intervalle de rafraîchissement (s)",
+        "de": "Aktualisierungsintervall (s)",
+        "es": "Intervalo de actualización (s)"
+      },
+      "description": {
+        "en": "How often each car is read from the Polestar cloud, in seconds (2 minutes minimum).",
+        "fr": "Fréquence de lecture de chaque voiture dans le cloud Polestar, en secondes (2 minutes minimum).",
+        "de": "Wie oft jedes Auto aus der Polestar-Cloud gelesen wird, in Sekunden (mindestens 2 Minuten).",
+        "es": "Frecuencia de lectura de cada coche en la nube de Polestar, en segundos (2 minutos como mínimo)."
+      },
+      "required": false,
+      "default": 300,
+      "min": 120,
+      "max": 3600
+    },
+    {
+      "key": "battery_low_threshold",
+      "type": "number",
+      "label": {
+        "en": "Low battery threshold (%)",
+        "fr": "Seuil de batterie faible (%)",
+        "de": "Schwelle für niedrigen Akku (%)",
+        "es": "Umbral de batería baja (%)"
+      },
+      "description": {
+        "en": "The \"Battery low\" scene trigger fires when the battery goes under this level.",
+        "fr": "Le déclencheur de scène « Batterie faible » se lance quand la batterie passe sous ce niveau.",
+        "de": "Der Szenen-Auslöser „Akku niedrig“ wird ausgelöst, wenn der Akku unter diesen Wert fällt.",
+        "es": "El disparador de escena «Batería baja» se activa cuando la batería baja de este nivel."
+      },
+      "required": false,
+      "default": 20,
+      "min": 1,
+      "max": 99
+    }
+  ],
+  "actions": [
+    {
+      "key": "test_connection",
+      "label": {
+        "en": "Test the connection",
+        "fr": "Tester la connexion",
+        "de": "Verbindung testen",
+        "es": "Probar la conexión"
+      },
+      "timeout_seconds": 60
+    }
+  ],
+  "scene_triggers": [
+    {
+      "key": "charging_started",
+      "label": {
+        "en": "Charging started",
+        "fr": "Charge démarrée",
+        "de": "Laden gestartet",
+        "es": "Carga iniciada"
+      },
+      "description": {
+        "en": "A Polestar started charging.",
+        "fr": "Une Polestar a commencé à charger.",
+        "de": "Ein Polestar hat mit dem Laden begonnen.",
+        "es": "Un Polestar empezó a cargar."
+      },
+      "fields": [
+        {
+          "key": "car",
+          "type": "select",
+          "source": "devices",
+          "label": { "en": "Car", "fr": "Voiture", "de": "Auto", "es": "Coche" }
+        }
+      ],
+      "variables": [
+        {
+          "key": "car_name",
+          "type": "string",
+          "label": { "en": "Car", "fr": "Voiture", "de": "Auto", "es": "Coche" }
+        },
+        {
+          "key": "battery_level",
+          "type": "number",
+          "label": {
+            "en": "Battery (%)",
+            "fr": "Batterie (%)",
+            "de": "Akku (%)",
+            "es": "Batería (%)"
+          }
+        },
+        {
+          "key": "range_km",
+          "type": "number",
+          "label": {
+            "en": "Range (km)",
+            "fr": "Autonomie (km)",
+            "de": "Reichweite (km)",
+            "es": "Autonomía (km)"
+          }
+        }
+      ]
+    },
+    {
+      "key": "charging_stopped",
+      "label": {
+        "en": "Charging stopped",
+        "fr": "Charge arrêtée",
+        "de": "Laden beendet",
+        "es": "Carga detenida"
+      },
+      "description": {
+        "en": "A Polestar stopped charging: charge complete, unplugged or paused.",
+        "fr": "Une Polestar a arrêté de charger : charge terminée, débranchée ou en pause.",
+        "de": "Ein Polestar lädt nicht mehr: voll, abgesteckt oder pausiert.",
+        "es": "Un Polestar dejó de cargar: carga completa, desenchufado o en pausa."
+      },
+      "fields": [
+        {
+          "key": "car",
+          "type": "select",
+          "source": "devices",
+          "label": { "en": "Car", "fr": "Voiture", "de": "Auto", "es": "Coche" }
+        }
+      ],
+      "variables": [
+        {
+          "key": "car_name",
+          "type": "string",
+          "label": { "en": "Car", "fr": "Voiture", "de": "Auto", "es": "Coche" }
+        },
+        {
+          "key": "battery_level",
+          "type": "number",
+          "label": {
+            "en": "Battery (%)",
+            "fr": "Batterie (%)",
+            "de": "Akku (%)",
+            "es": "Batería (%)"
+          }
+        },
+        {
+          "key": "range_km",
+          "type": "number",
+          "label": {
+            "en": "Range (km)",
+            "fr": "Autonomie (km)",
+            "de": "Reichweite (km)",
+            "es": "Autonomía (km)"
+          }
+        },
+        {
+          "key": "completed",
+          "type": "boolean",
+          "label": {
+            "en": "Charge complete",
+            "fr": "Charge terminée",
+            "de": "Vollständig geladen",
+            "es": "Carga completa"
+          }
+        }
+      ]
+    },
+    {
+      "key": "battery_low",
+      "label": {
+        "en": "Battery low",
+        "fr": "Batterie faible",
+        "de": "Akku niedrig",
+        "es": "Batería baja"
+      },
+      "description": {
+        "en": "The battery of a Polestar went under the threshold of the configuration.",
+        "fr": "La batterie d'une Polestar est passée sous le seuil de la configuration.",
+        "de": "Der Akku eines Polestar ist unter die eingestellte Schwelle gefallen.",
+        "es": "La batería de un Polestar bajó del umbral de la configuración."
+      },
+      "fields": [
+        {
+          "key": "car",
+          "type": "select",
+          "source": "devices",
+          "label": { "en": "Car", "fr": "Voiture", "de": "Auto", "es": "Coche" }
+        }
+      ],
+      "variables": [
+        {
+          "key": "car_name",
+          "type": "string",
+          "label": { "en": "Car", "fr": "Voiture", "de": "Auto", "es": "Coche" }
+        },
+        {
+          "key": "battery_level",
+          "type": "number",
+          "label": {
+            "en": "Battery (%)",
+            "fr": "Batterie (%)",
+            "de": "Akku (%)",
+            "es": "Batería (%)"
+          }
+        },
+        {
+          "key": "range_km",
+          "type": "number",
+          "label": {
+            "en": "Range (km)",
+            "fr": "Autonomie (km)",
+            "de": "Reichweite (km)",
+            "es": "Autonomía (km)"
+          }
+        },
+        {
+          "key": "threshold",
+          "type": "number",
+          "label": {
+            "en": "Threshold (%)",
+            "fr": "Seuil (%)",
+            "de": "Schwelle (%)",
+            "es": "Umbral (%)"
+          }
+        }
+      ]
+    },
+    {
+      "key": "service_due",
+      "label": {
+        "en": "Service needed",
+        "fr": "Entretien à prévoir",
+        "de": "Wartung nötig",
+        "es": "Mantenimiento necesario"
+      },
+      "description": {
+        "en": "The service of a Polestar became more urgent: soon, due, then overdue.",
+        "fr": "L'entretien d'une Polestar devient plus urgent : bientôt, à faire, puis en retard.",
+        "de": "Die Wartung eines Polestar wird dringender: bald, fällig, dann überfällig.",
+        "es": "El mantenimiento de un Polestar es más urgente: pronto, necesario y luego atrasado."
+      },
+      "fields": [
+        {
+          "key": "car",
+          "type": "select",
+          "source": "devices",
+          "label": { "en": "Car", "fr": "Voiture", "de": "Auto", "es": "Coche" }
+        },
+        {
+          "key": "level",
+          "type": "multi_select",
+          "label": { "en": "Urgency", "fr": "Urgence", "de": "Dringlichkeit", "es": "Urgencia" },
+          "options": [
+            {
+              "value": "soon",
+              "label": { "en": "Soon", "fr": "Bientôt", "de": "Bald fällig", "es": "Pronto" }
+            },
+            {
+              "value": "due",
+              "label": { "en": "Due", "fr": "À faire", "de": "Fällig", "es": "Necesario" }
+            },
+            {
+              "value": "overdue",
+              "label": { "en": "Overdue", "fr": "En retard", "de": "Überfällig", "es": "Atrasado" }
+            }
+          ]
+        }
+      ],
+      "variables": [
+        {
+          "key": "car_name",
+          "type": "string",
+          "label": { "en": "Car", "fr": "Voiture", "de": "Auto", "es": "Coche" }
+        },
+        {
+          "key": "level",
+          "type": "string",
+          "label": { "en": "Urgency", "fr": "Urgence", "de": "Dringlichkeit", "es": "Urgencia" }
+        },
+        {
+          "key": "days_to_service",
+          "type": "number",
+          "label": {
+            "en": "Days to service",
+            "fr": "Jours avant entretien",
+            "de": "Tage bis zur Wartung",
+            "es": "Días hasta el mantenimiento"
+          }
+        },
+        {
+          "key": "distance_to_service_km",
+          "type": "number",
+          "label": {
+            "en": "Distance to service (km)",
+            "fr": "Distance avant entretien (km)",
+            "de": "Strecke bis zur Wartung (km)",
+            "es": "Distancia hasta el mantenimiento (km)"
+          }
+        }
+      ]
+    }
+  ],
+  "scene_actions": [
+    {
+      "key": "refresh_car",
+      "label": {
+        "en": "Read a Polestar now",
+        "fr": "Lire une Polestar maintenant",
+        "de": "Polestar jetzt auslesen",
+        "es": "Leer un Polestar ahora"
+      },
+      "description": {
+        "en": "Reads the car from the Polestar cloud and gives its values to the next actions.",
+        "fr": "Lit la voiture dans le cloud Polestar et donne ses valeurs aux actions suivantes.",
+        "de": "Liest das Auto aus der Polestar-Cloud und gibt seine Werte an die nächsten Aktionen.",
+        "es": "Lee el coche en la nube de Polestar y pasa sus valores a las acciones siguientes."
+      },
+      "timeout_seconds": 60,
+      "fields": [
+        {
+          "key": "car",
+          "type": "select",
+          "source": "devices",
+          "label": { "en": "Car", "fr": "Voiture", "de": "Auto", "es": "Coche" },
+          "required": true
+        }
+      ],
+      "outputs": [
+        {
+          "key": "battery_level",
+          "type": "number",
+          "label": {
+            "en": "Battery (%)",
+            "fr": "Batterie (%)",
+            "de": "Akku (%)",
+            "es": "Batería (%)"
+          }
+        },
+        {
+          "key": "range_km",
+          "type": "number",
+          "label": {
+            "en": "Range (km)",
+            "fr": "Autonomie (km)",
+            "de": "Reichweite (km)",
+            "es": "Autonomía (km)"
+          }
+        },
+        {
+          "key": "charging",
+          "type": "boolean",
+          "label": { "en": "Charging", "fr": "En charge", "de": "Lädt", "es": "Cargando" }
+        },
+        {
+          "key": "odometer_km",
+          "type": "number",
+          "label": {
+            "en": "Odometer (km)",
+            "fr": "Compteur (km)",
+            "de": "Kilometerstand (km)",
+            "es": "Odómetro (km)"
+          }
+        },
+        {
+          "key": "service",
+          "type": "string",
+          "label": { "en": "Service", "fr": "Entretien", "de": "Wartung", "es": "Mantenimiento" }
+        }
+      ]
+    }
+  ],
+  "widgets": [
+    {
+      "key": "car",
+      "label": {
+        "en": "Polestar car",
+        "fr": "Voiture Polestar",
+        "de": "Polestar-Auto",
+        "es": "Coche Polestar"
+      },
+      "description": {
+        "en": "Battery, range, charging and service of one car, with a refresh button.",
+        "fr": "Batterie, autonomie, charge et entretien d'une voiture, avec un bouton d'actualisation.",
+        "de": "Akku, Reichweite, Laden und Wartung eines Autos, mit Aktualisieren-Knopf.",
+        "es": "Batería, autonomía, carga y mantenimiento de un coche, con botón de actualizar."
+      },
+      "icon": "battery-charging",
+      "settings": [
+        {
+          "key": "car",
+          "type": "select",
+          "source": "devices",
+          "label": { "en": "Car", "fr": "Voiture", "de": "Auto", "es": "Coche" },
+          "required": true
+        }
+      ],
+      "action_timeout_seconds": 60
+    }
+  ]
+}
