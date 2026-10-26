@@ -10,6 +10,8 @@ the notes of the version's GitHub Release.
 
 ## [Unreleased]
 
+## [0.0.1] - 2026-10-26
+
 ### Added
 
 - Polestar ID sign-in (e-mail and password of the Polestar app), with the token
@@ -36,4 +38,5 @@ the notes of the version's GitHub Release.
   Release workflow, GitHub Releases and Dependabot.
 - `SECURITY.md` and `CLAUDE.md`.
 
-[Unreleased]: https://github.com/prohand/gladys-polestar/commits/main
+[Unreleased]: https://github.com/prohand/gladys-polestar/compare/v0.0.1...HEAD
+[0.0.1]: https://github.com/prohand/gladys-polestar/releases/tag/v0.0.1

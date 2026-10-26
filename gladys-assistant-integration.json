@@ -8,8 +8,8 @@
     "de": "Akku, Reichweite, Laden, Kilometerstand und Wartung deiner Polestar.",
     "es": "Batería, autonomía, carga, kilometraje y mantenimiento de sus Polestar."
   },
-  "version": "0.0.0",
-  "docker_image": "ghcr.io/prohand/gladys-polestar:0.0.0",
+  "version": "0.0.1",
+  "docker_image": "ghcr.io/prohand/gladys-polestar:0.0.1",
   "gladys_version": ">=5.3.0",
   "cover_image": "https://raw.githubusercontent.com/prohand/gladys-polestar/main/cover.png",
   "categories": ["vehicles", "energy"],
@@ -179,14 +179,24 @@
           "key": "car",
           "type": "select",
           "source": "devices",
-          "label": { "en": "Car", "fr": "Voiture", "de": "Auto", "es": "Coche" }
+          "label": {
+            "en": "Car",
+            "fr": "Voiture",
+            "de": "Auto",
+            "es": "Coche"
+          }
         }
       ],
       "variables": [
         {
           "key": "car_name",
           "type": "string",
-          "label": { "en": "Car", "fr": "Voiture", "de": "Auto", "es": "Coche" }
+          "label": {
+            "en": "Car",
+            "fr": "Voiture",
+            "de": "Auto",
+            "es": "Coche"
+          }
         },
         {
           "key": "battery_level",
@@ -229,14 +239,24 @@
           "key": "car",
           "type": "select",
           "source": "devices",
-          "label": { "en": "Car", "fr": "Voiture", "de": "Auto", "es": "Coche" }
+          "label": {
+            "en": "Car",
+            "fr": "Voiture",
+            "de": "Auto",
+            "es": "Coche"
+          }
         }
       ],
       "variables": [
         {
           "key": "car_name",
           "type": "string",
-          "label": { "en": "Car", "fr": "Voiture", "de": "Auto", "es": "Coche" }
+          "label": {
+            "en": "Car",
+            "fr": "Voiture",
+            "de": "Auto",
+            "es": "Coche"
+          }
         },
         {
           "key": "battery_level",
@@ -289,14 +309,24 @@
           "key": "car",
           "type": "select",
           "source": "devices",
-          "label": { "en": "Car", "fr": "Voiture", "de": "Auto", "es": "Coche" }
+          "label": {
+            "en": "Car",
+            "fr": "Voiture",
+            "de": "Auto",
+            "es": "Coche"
+          }
         }
       ],
       "variables": [
         {
           "key": "car_name",
           "type": "string",
-          "label": { "en": "Car", "fr": "Voiture", "de": "Auto", "es": "Coche" }
+          "label": {
+            "en": "Car",
+            "fr": "Voiture",
+            "de": "Auto",
+            "es": "Coche"
+          }
         },
         {
           "key": "battery_level",
@@ -349,24 +379,49 @@
           "key": "car",
           "type": "select",
           "source": "devices",
-          "label": { "en": "Car", "fr": "Voiture", "de": "Auto", "es": "Coche" }
+          "label": {
+            "en": "Car",
+            "fr": "Voiture",
+            "de": "Auto",
+            "es": "Coche"
+          }
         },
         {
           "key": "level",
           "type": "multi_select",
-          "label": { "en": "Urgency", "fr": "Urgence", "de": "Dringlichkeit", "es": "Urgencia" },
+          "label": {
+            "en": "Urgency",
+            "fr": "Urgence",
+            "de": "Dringlichkeit",
+            "es": "Urgencia"
+          },
           "options": [
             {
               "value": "soon",
-              "label": { "en": "Soon", "fr": "Bientôt", "de": "Bald fällig", "es": "Pronto" }
+              "label": {
+                "en": "Soon",
+                "fr": "Bientôt",
+                "de": "Bald fällig",
+                "es": "Pronto"
+              }
             },
             {
               "value": "due",
-              "label": { "en": "Due", "fr": "À faire", "de": "Fällig", "es": "Necesario" }
+              "label": {
+                "en": "Due",
+                "fr": "À faire",
+                "de": "Fällig",
+                "es": "Necesario"
+              }
             },
             {
               "value": "overdue",
-              "label": { "en": "Overdue", "fr": "En retard", "de": "Überfällig", "es": "Atrasado" }
+              "label": {
+                "en": "Overdue",
+                "fr": "En retard",
+                "de": "Überfällig",
+                "es": "Atrasado"
+              }
             }
           ]
         }
@@ -375,12 +430,22 @@
         {
           "key": "car_name",
           "type": "string",
-          "label": { "en": "Car", "fr": "Voiture", "de": "Auto", "es": "Coche" }
+          "label": {
+            "en": "Car",
+            "fr": "Voiture",
+            "de": "Auto",
+            "es": "Coche"
+          }
         },
         {
           "key": "level",
           "type": "string",
-          "label": { "en": "Urgency", "fr": "Urgence", "de": "Dringlichkeit", "es": "Urgencia" }
+          "label": {
+            "en": "Urgency",
+            "fr": "Urgence",
+            "de": "Dringlichkeit",
+            "es": "Urgencia"
+          }
         },
         {
           "key": "days_to_service",
@@ -426,7 +491,12 @@
           "key": "car",
           "type": "select",
           "source": "devices",
-          "label": { "en": "Car", "fr": "Voiture", "de": "Auto", "es": "Coche" },
+          "label": {
+            "en": "Car",
+            "fr": "Voiture",
+            "de": "Auto",
+            "es": "Coche"
+          },
           "required": true
         }
       ],
@@ -454,7 +524,12 @@
         {
           "key": "charging",
           "type": "boolean",
-          "label": { "en": "Charging", "fr": "En charge", "de": "Lädt", "es": "Cargando" }
+          "label": {
+            "en": "Charging",
+            "fr": "En charge",
+            "de": "Lädt",
+            "es": "Cargando"
+          }
         },
         {
           "key": "odometer_km",
@@ -469,7 +544,12 @@
         {
           "key": "service",
           "type": "string",
-          "label": { "en": "Service", "fr": "Entretien", "de": "Wartung", "es": "Mantenimiento" }
+          "label": {
+            "en": "Service",
+            "fr": "Entretien",
+            "de": "Wartung",
+            "es": "Mantenimiento"
+          }
         }
       ]
     }
@@ -495,7 +575,12 @@
           "key": "car",
           "type": "select",
           "source": "devices",
-          "label": { "en": "Car", "fr": "Voiture", "de": "Auto", "es": "Coche" },
+          "label": {
+            "en": "Car",
+            "fr": "Voiture",
+            "de": "Auto",
+            "es": "Coche"
+          },
           "required": true
         }
       ],
